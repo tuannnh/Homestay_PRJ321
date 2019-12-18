@@ -1,0 +1,139 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- Configuration for the default package. -->
+    <package name="default" extends="struts-default">
+        
+        <interceptors>
+            <interceptor name="authorization" class="homestay.interceptors.Authorize" />
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="servletConfig" />
+                <interceptor-ref name="params" />
+                <interceptor-ref name="authorization" />
+                <interceptor-ref name="prepare" />
+                <interceptor-ref name="modelDriven" />
+                <interceptor-ref name="fileUpload" />
+                <interceptor-ref name="staticParams" /> 
+                <interceptor-ref name="conversionError" />
+                <interceptor-ref name="validation" />
+                <interceptor-ref name="workflow" />
+            </interceptor-stack>
+        </interceptors>
+        
+        <default-interceptor-ref name="myStack"/>
+        
+        <global-results>
+            <result name="login">login.jsp</result>
+            <result name="notallow" type="redirect">/index.jsp</result>
+            <result name="error" type="redirect">index.jsp</result>
+        </global-results>
+ 
+        <action name="LoginAction" class="homestay.actions.LoginAction">
+            <result name="error">login.jsp</result>
+            <result name="success" type="redirect">index.jsp</result>
+            <result name="logged">index.jsp</result>
+        </action>
+        <action name="LogoutAction" class="homestay.actions.LogoutAction">
+            <result name="success" type="redirect">index.jsp</result>
+        </action>
+        <action name="HomeAction" class="homestay.actions.Home">
+            <result name="success">index.jsp</result>
+        </action>
+        <action name="SearchUserAction" class="homestay.actions.SearchUserAction">
+            <result name="success">user.jsp</result>
+        </action>
+        <action name="CreateUserAction" class="homestay.actions.CreateUserAction">
+            <result name="admin" type="chain">SearchUserAction</result>
+            <result name="newUser">login.jsp</result>
+            <result name="createError" type="chain">SearchUserAction</result>
+            <result name="registerError">register.jsp</result>
+        </action>
+        <action name="DeleteUserAction" class="homestay.actions.DeleteUserAction">
+            <result name="success" type="chain">SearchUserAction</result>
+        </action>
+        <action name="EditUserAction" class="homestay.actions.EditUserAction">
+            <result name="success">update-user.jsp</result>
+        </action>
+        <action name="UpdateUserAction" class="homestay.actions.UpdateUserAction">
+            <result name="admin" type="chain">SearchUserAction</result>
+            <result name="nonadmin" type="chain">SearchBookingAction</result>
+        </action>
+        
+        <action name="SearchRoomAction" class="homestay.actions.SearchRoomAction">
+            <result name="success">room.jsp</result>
+        </action>
+        
+        <action name="CreateRoomAction" class="homestay.actions.CreateRoomAction">
+            <result name="success" type="chain">SearchRoomAction</result>
+            <result name="error" type="chain">SearchRoomAction</result>
+        </action>
+        
+        <action name="DeleteRoomAction" class="homestay.actions.DeleteRoomAction">
+            <result name="success" type="chain">SearchRoomAction</result>
+            <result name="error" type="chain">SearchRoomAction</result>
+        </action>
+        
+        <action name="EditRoomAction" class="homestay.actions.EditRoomAction">
+            <result name="success">update-room.jsp</result>
+        </action>
+        
+        <action name="UpdateRoomAction" class="homestay.actions.UpdateRoomAction">
+            <result name="success" type="chain">SearchRoomAction</result>
+            <result name="error" type="chain">SearchRoomAction</result>
+        </action>
+        
+        <action name="SearchBookingAction" class="homestay.actions.SearchBookingAction">
+            <result name="admin" type="redirect">admin/booking.jsp</result>
+            <result name="staff" type="redirect">staff/booking.jsp</result>
+            <result name="user" type="redirect">user/booking.jsp</result>
+            <result name="home">booking.jsp</result>
+        </action>
+        <action name="DeleteBookingAction" class="homestay.actions.DeleteBookingAction">
+            <result name="success" type="chain">SearchBookingAction</result>
+        </action>
+        <action name="EditBookingAction" class="homestay.actions.EditBookingAction">
+            <result name="success">/update-booking-date.jsp</result>
+        </action>
+        <action name="ApplyDateAction" class="homestay.actions.ApplyDateAction">
+            <result name="createError">/booking-date.jsp</result>
+            <result name="updateError">/update-booking-date.jsp</result>
+            <result name="create">/booking-full.jsp</result>
+            <result name="update">/update-booking-full.jsp</result>
+        </action>
+        <action name="UpdateBookingAction" class="homestay.actions.UpdateBookingAction">
+            <result name="error">/error.jsp</result>
+            <result name="success" type="chain">SearchBookingAction</result>
+        </action>
+        <action name="CreateBookingAction" class="homestay.actions.CreateBookingAction">
+            <result name="error">/error.jsp</result>
+            <result name="success" type="chain">SearchBookingAction</result>
+        </action>
+        <action name="CheckOutAction" class="homestay.actions.CheckOutAction">
+            <result name="success">checkout.jsp</result>
+        </action>
+        <action name="CreateBillAction" class="homestay.actions.CreateBillAction">
+            <result name="success">booking.jsp</result>
+            <result name="error">booking.jsp</result>
+        </action>
+        <action name="SearchBillAction" class="homestay.actions.SearchBillAction">
+            <result name="success">history.jsp</result>
+        </action>
+        <action name="SearchCouponAction" class="homestay.actions.SearchCouponAction">
+            <result name="success">coupon.jsp</result>
+        </action>
+        
+        <action name="CreateCouponAction" class="homestay.actions.CreateCouponAction">
+            <result name="success" type="chain">SearchCouponAction</result>
+            <result name="error" type="chain">SearchCouponAction</result>
+        </action>
+        
+        <action name="DeleteCouponAction" class="homestay.actions.DeleteCouponAction">
+            <result name="success" type="chain">SearchCouponAction</result>
+            <result name="error" type="chain">SearchCouponAction</result>
+        </action>
+ 
+    </package>
+
+</struts>
